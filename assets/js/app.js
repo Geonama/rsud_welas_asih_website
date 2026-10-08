@@ -245,7 +245,7 @@
                 const bed = bedsById.get(id);
                 const label = `Bed ${bed.bed_code}, ${bed.status_label}`;
                 return `<li class="transit-seat transit-seat--${escapeHtml(String(bed.status).toLowerCase())}" data-transit-bed="${Number(bed.id)}" data-status="${escapeHtml(bed.status)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">
-                    <span class="transit-seat-shape" aria-hidden="true"><svg class="transit-seat-icon" viewBox="0 0 48 48"><use href="#transit-seat-glyph"/></svg><strong class="transit-seat-code">${escapeHtml(bed.bed_code)}</strong></span>
+                    <span class="transit-seat-shape" aria-hidden="true"><svg class="transit-seat-icon" viewBox="0 0 48 48"><use href="#transit-bed-glyph"/></svg><strong class="transit-seat-code">${escapeHtml(bed.bed_code)}</strong></span>
                     <small class="transit-seat-status" aria-hidden="true">${escapeHtml(bed.status_label)}</small>
                 </li>`;
             }).join('');

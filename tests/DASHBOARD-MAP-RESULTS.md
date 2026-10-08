@@ -1,7 +1,7 @@
 # Pengujian Denah Bed Dashboard — 8 Oktober 2026
 
-Denah bed seperti kursi bioskop tampil pada Dashboard Admin, Perawat IGD,
-dan Perawat Transit. Kelompok kamar dan bed mengikuti data Ruang Transit,
+Denah bed dengan ikon kasur dan susunan seperti bioskop tampil pada
+Dashboard Admin, Perawat IGD, dan Perawat Transit. Kelompok kamar dan bed mengikuti data Ruang Transit,
 termasuk Isolasi serta kelompok Bed Lainnya jika ada bed tambahan.
 
 - 36 kombinasi role/tema/ukuran layar lolos: ketiga role, tema terang dan
@@ -29,3 +29,8 @@ Artefak denah: `C:\Users\ggmin\AppData\Local\Temp\etransit-dashboard-map-RLCTVy`
 Artefak fitur: `C:\Users\ggmin\AppData\Local\Temp\etransit-functional-m7eDPm`.
 Artefak tema: `C:\Users\ggmin\AppData\Local\Temp\etransit-theme-Oj9Zeo`.
 Artefak Apache: `C:\Users\ggmin\AppData\Local\Temp\etransit-live-health-54uT7z`.
+
+Pembaruan ikon kursi menjadi kasur diuji ulang: seluruh 36 kombinasi
+role/tema/viewport, warna/kontras, dan pembaruan status tetap lolos.
+Screenshot desktop dan ponsel diperiksa; sintaks PHP/JavaScript lolos.
+Artefak ikon kasur: `C:\Users\ggmin\AppData\Local\Temp\etransit-dashboard-map-sxlC2W`.

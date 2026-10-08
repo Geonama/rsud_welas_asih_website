@@ -43,8 +43,8 @@ keyboard/tab baru dan preferensi pengurangan gerakan pada perangkat.
 
 ## Denah Bed di Dashboard
 
-Dashboard ketiga role menampilkan denah kecil dengan susunan bed seperti
-kursi bioskop. Nama kelompok kamar mengikuti Ruang Transit: 1A-1F,
+Dashboard ketiga role menampilkan denah kecil dengan susunan seperti
+bioskop dan ikon kasur. Nama kelompok kamar mengikuti Ruang Transit: 1A-1F,
 2A-2F, 4A-4C, 5A-5B, dan Isolasi. Bed kosong berwarna hijau, terisi
 merah, siap transfer biru, dan nonaktif abu-abu. Kode bed serta legenda
 status tetap tersedia pada tema terang/gelap dan layar ponsel.
