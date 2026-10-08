@@ -1,0 +1,25 @@
+# Local configuration and runtime files
+.env
+.env.*
+!.env.example
+*.log
+/logs/*
+!/logs/.gitkeep
+/backups/
+/database/backups/
+*.bak
+*.sqlite
+*.sqlite3
+
+# Dependencies and generated output
+node_modules/
+/test-results/
+/playwright-report/
+*.xlsx
+*.zip
+*.7z
+*.rar
+
+# Operating system files
+Thumbs.db
+.DS_Store
