@@ -69,6 +69,14 @@ const before = fingerprint();
                         failure: /Database belum siap|Terjadi kesalahan pada sistem|Fatal error|SQLSTATE\[/.test(document.body.innerText),
                     }));
                     assert.deepEqual(state, { overflow: false, missingSheets: [], brokenImages: 0, theme, failure: false }, `${role.name}: ${route}`);
+                    if (route === 'dashboard') {
+                        const bedPayload = await (await context.request.get('api.php?action=beds')).json();
+                        assert.equal(await page.locator('[data-transit-bed]').count(), bedPayload.beds.length);
+                        assert.deepEqual(await page.locator('.transit-room-heading h3').allTextContents(), bedPayload.groups.map(group => group.label));
+                        for (const bed of bedPayload.beds) {
+                            assert.equal(await page.locator(`[data-transit-bed="${bed.id}"]`).getAttribute('data-status'), bed.status);
+                        }
+                    }
                     results.push({ role: role.name, route: route.split('&')[0], width, theme, ok: true });
                 }
             }

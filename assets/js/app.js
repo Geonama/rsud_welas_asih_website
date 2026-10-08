@@ -173,7 +173,9 @@
     });
 
     const grid = qs('[data-bed-grid]');
-    if (grid || qs('[data-live-summary]')) {
+    const miniMap = qs('[data-transit-bed-map]');
+    if (grid || miniMap || qs('[data-live-summary]')) {
+        let miniMapSignature = null;
         const manageRequested = grid?.dataset.manage === '1';
         const actionIcon = (name) => `<img src="assets/icons/${name}.svg" alt="" aria-hidden="true" width="18" height="18">`;
         const renderStatus = (status, label) => `<span class="status-badge status-${escapeHtml(status.toLowerCase())}">${escapeHtml(label)}</span>`;
@@ -238,6 +240,22 @@
             </details>`;
         };
 
+        const renderMiniRoom = (group, bedsById) => {
+            const seats = group.bed_ids.map(id => {
+                const bed = bedsById.get(id);
+                const label = `Bed ${bed.bed_code}, ${bed.status_label}`;
+                return `<li class="transit-seat transit-seat--${escapeHtml(String(bed.status).toLowerCase())}" data-transit-bed="${Number(bed.id)}" data-status="${escapeHtml(bed.status)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">
+                    <span class="transit-seat-shape" aria-hidden="true"><svg class="transit-seat-icon" viewBox="0 0 48 48"><use href="#transit-seat-glyph"/></svg><strong class="transit-seat-code">${escapeHtml(bed.bed_code)}</strong></span>
+                    <small class="transit-seat-status" aria-hidden="true">${escapeHtml(bed.status_label)}</small>
+                </li>`;
+            }).join('');
+            return `<article class="transit-room" data-transit-room="${escapeHtml(group.id)}">
+                <header class="transit-room-heading"><h3>${escapeHtml(group.label)}</h3><span>${Number(group.summary.total)} bed</span></header>
+                <div class="transit-room-front" aria-hidden="true"></div>
+                <ul class="transit-room-seats${group.bed_ids.length <= 2 ? ' transit-room-seats-small' : ''}" aria-label="Bed kamar ${escapeHtml(group.label)}">${seats}</ul>
+            </article>`;
+        };
+
         const updateBeds = async () => {
             try {
                 const response = await fetch('api.php?action=beds', { headers: { 'Accept': 'application/json' } });
@@ -248,17 +266,29 @@
                 if (!response.ok) return;
                 const payload = await response.json();
                 if (!payload.ok) return;
+                const bedsById = new Map(payload.beds.map(bed => [bed.id, bed]));
                 if (grid) {
                     const groups = qsa('[data-bed-group]', grid);
                     const openStates = new Map(groups.map(group => [group.dataset.bedGroup, group.open]));
                     const focusedGroup = document.activeElement?.matches('.bed-group-header')
                         ? document.activeElement.parentElement.dataset.bedGroup : null;
-                    const bedsById = new Map(payload.beds.map(bed => [bed.id, bed]));
                     grid.innerHTML = payload.groups.map(group => renderGroup(group, bedsById, payload.canManage, payload.csrf,
                         openStates.get(group.id) ?? true)).join('');
                     if (focusedGroup) {
                         qsa('[data-bed-group]', grid).find(group => group.dataset.bedGroup === focusedGroup)
                             ?.querySelector('.bed-group-header').focus({ preventScroll: true });
+                    }
+                }
+                if (miniMap) {
+                    const signature = JSON.stringify([
+                        payload.groups.map(group => [group.id, group.label, group.bed_ids]),
+                        payload.beds.map(bed => [bed.id, bed.bed_code, bed.status, bed.status_label]),
+                    ]);
+                    if (signature !== miniMapSignature) {
+                        miniMap.innerHTML = payload.groups.map(group => renderMiniRoom(group, bedsById)).join('');
+                        const meta = qs('[data-transit-map-total]');
+                        if (meta) meta.textContent = `${payload.beds.length} bed · ${payload.groups.length} kelompok kamar`;
+                        miniMapSignature = signature;
                     }
                 }
                 qsa('[data-summary]').forEach((item) => {

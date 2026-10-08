@@ -835,6 +835,8 @@ function render_dashboard(PDO $pdo): void
         </article>
     </section>
 
+    <?php render_dashboard_bed_map(group_beds(fetch_beds_with_patients($pdo))); ?>
+
     <section class="dashboard-details">
         <article class="dashboard-section dashboard-bed-section">
             <div class="panel-title"><h2 id="bed-composition-title">Komposisi Bed</h2><span class="dashboard-section-meta" data-summary="active" data-summary-suffix=" bed aktif"><?= e($empty + $occupied + $ready) ?> bed aktif</span></div>
@@ -876,6 +878,63 @@ function render_dashboard(PDO $pdo): void
     </section>
     <?php
     render_app_footer();
+}
+
+function render_dashboard_bed_map(array $groups): void
+{
+    $total = array_sum(array_column(array_column($groups, 'summary'), 'total'));
+    ?>
+    <section class="transit-map" aria-labelledby="transit-map-title">
+        <svg class="transit-map-symbols" aria-hidden="true" width="0" height="0">
+            <defs>
+                <g id="transit-seat-glyph" stroke-width="1.5">
+                    <rect x="8" y="3" width="32" height="32" rx="8"/>
+                    <rect x="16" y="8" width="16" height="5" rx="2.5" fill="currentColor" stroke="none" opacity=".3"/>
+                    <rect x="3" y="21" width="6" height="17" rx="3"/>
+                    <rect x="39" y="21" width="6" height="17" rx="3"/>
+                    <rect x="8" y="32" width="32" height="9" rx="4"/>
+                    <path d="M11 42v3m26-3v3" fill="none" stroke-linecap="round"/>
+                </g>
+            </defs>
+        </svg>
+        <div class="transit-map-heading">
+            <div>
+                <h2 id="transit-map-title">Denah Bed Ruang Transit</h2>
+                <p>Susunan bed per kamar &middot; diperbarui otomatis</p>
+            </div>
+            <span class="transit-map-meta" data-transit-map-total><?= e($total) ?> bed &middot; <?= e(count($groups)) ?> kelompok kamar</span>
+        </div>
+        <div class="transit-map-legend" aria-label="Keterangan status bed">
+            <span><i class="transit-legend-dot transit-legend-empty" aria-hidden="true"></i>Kosong</span>
+            <span><i class="transit-legend-dot transit-legend-occupied" aria-hidden="true"></i>Terisi</span>
+            <span><i class="transit-legend-dot transit-legend-ready" aria-hidden="true"></i>Siap Transfer</span>
+            <span><i class="transit-legend-dot transit-legend-inactive" aria-hidden="true"></i>Nonaktif</span>
+        </div>
+        <div class="transit-map-rooms" data-transit-bed-map>
+            <?php foreach ($groups as $group): ?>
+                <article class="transit-room" data-transit-room="<?= e($group['id']) ?>">
+                    <header class="transit-room-heading">
+                        <h3><?= e($group['label']) ?></h3>
+                        <span><?= e($group['summary']['total']) ?> bed</span>
+                    </header>
+                    <div class="transit-room-front" aria-hidden="true"></div>
+                    <ul class="transit-room-seats<?= count($group['beds']) <= 2 ? ' transit-room-seats-small' : '' ?>" aria-label="Bed kamar <?= e($group['label']) ?>">
+                        <?php foreach ($group['beds'] as $bed): ?>
+                            <?php $label = 'Bed ' . $bed['bed_code'] . ', ' . bed_status_label($bed['status']); ?>
+                            <li class="transit-seat transit-seat--<?= e(strtolower($bed['status'])) ?>" data-transit-bed="<?= e($bed['id']) ?>" data-status="<?= e($bed['status']) ?>" aria-label="<?= e($label) ?>" title="<?= e($label) ?>">
+                                <span class="transit-seat-shape" aria-hidden="true">
+                                    <svg class="transit-seat-icon" viewBox="0 0 48 48"><use href="#transit-seat-glyph"/></svg>
+                                    <strong class="transit-seat-code"><?= e($bed['bed_code']) ?></strong>
+                                </span>
+                                <small class="transit-seat-status" aria-hidden="true"><?= e(bed_status_label($bed['status'])) ?></small>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php
 }
 
 function fetch_beds_with_patients(PDO $pdo): array

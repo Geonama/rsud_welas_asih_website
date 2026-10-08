@@ -57,7 +57,7 @@ async function checkPage(page, theme) {
             }
             return candidates;
         };
-        const selectors = 'h1, h2, h3, label, .btn, input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select, textarea, .eyebrow, .nav-menu a, .sidebar-brand span, .sidebar-institution, .user-chip span, .user-chip small, .panel-title p, .toolbar-panel p, .stat-heading span, .stat-card > span, .bed-patient strong, .bed-patient span, .bed-patient small, .bed-empty, .status-badge, .legend span, .bed-group-count, .bed-group-summary span, .data-table th, .data-table td:not(.table-actions), .detail-grid span, .detail-grid strong, .dashboard-criterion p, .dashboard-section-meta, .password-hint, .recommendation-box, .auth-brand p, .auth-switch, .theme-toggle-copy small, [data-theme-label]';
+        const selectors = 'h1, h2, h3, label, .btn, input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select, textarea, .eyebrow, .nav-menu a, .sidebar-brand span, .sidebar-institution, .user-chip span, .user-chip small, .panel-title p, .toolbar-panel p, .stat-heading span, .stat-card > span, .bed-patient strong, .bed-patient span, .bed-patient small, .bed-empty, .status-badge, .legend span, .bed-group-count, .bed-group-summary span, .data-table th, .data-table td:not(.table-actions), .detail-grid span, .detail-grid strong, .dashboard-criterion p, .dashboard-section-meta, .password-hint, .recommendation-box, .auth-brand p, .auth-switch, .theme-toggle-copy small, [data-theme-label], .transit-map-heading p, .transit-map-meta, .transit-map-legend span, .transit-room-heading span, .transit-seat-code, .transit-seat-status';
         const failures = [];
         let checked = 0;
         for (const element of document.querySelectorAll(selectors)) {

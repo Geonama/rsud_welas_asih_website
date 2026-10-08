@@ -100,6 +100,9 @@ function render_app_header(PDO $pdo, string $title, string $activePage): void
         <link rel="stylesheet" href="assets/css/styles.css?v=<?= filemtime(__DIR__ . '/../assets/css/styles.css') ?>">
         <link rel="stylesheet" href="assets/css/app-glass.css?v=<?= filemtime(__DIR__ . '/../assets/css/app-glass.css') ?>">
         <?php render_theme_assets(); ?>
+        <?php if ($activePage === 'dashboard'): ?>
+            <link rel="stylesheet" href="assets/css/transit-map.css?v=<?= filemtime(__DIR__ . '/../assets/css/transit-map.css') ?>">
+        <?php endif; ?>
         <link rel="stylesheet" href="assets/css/navigation.css?v=<?= filemtime(__DIR__ . '/../assets/css/navigation.css') ?>">
         <script defer src="assets/js/navigation.js?v=<?= filemtime(__DIR__ . '/../assets/js/navigation.js') ?>"></script>
     </head>

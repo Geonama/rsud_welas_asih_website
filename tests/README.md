@@ -68,3 +68,14 @@ admin/igd/transit jika password-nya masih berlaku. Password tidak direset.
 Login/logout memperbarui metadata login dan audit; data pasien/bed tidak
 diubah. `LIVE_BASE_URL` dapat diatur bila alamat aplikasi berbeda.
 Artefak hanya berisi hasil pemeriksaan, tanpa screenshot data pasien asli.
+
+Pengujian denah bed dashboard dengan database sementara:
+
+```powershell
+node tests/dashboard-map.cjs
+```
+
+Runner memeriksa 19 bed dan kelompok kamar pada ketiga role, warna status
+dan kontras kode bed, kedua tema, lebar 320–1440px, pembaruan status melalui
+API, penambahan/penghapusan bed, dan pembaruan yang tidak mengganti elemen
+denah ketika datanya sama. Screenshot hanya menggunakan data contoh.
